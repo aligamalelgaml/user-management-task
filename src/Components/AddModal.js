@@ -7,7 +7,8 @@ import { Grid, Button, FormControl, TextField, Select, MenuItem, InputLabel } fr
 
 
 export default class AddModal extends React.Component {
-    state = { name: this.props.user.name, username: this.props.user.username, email: this.props.user.email, userGroup: this.props.user.userGroup, profile: this.props.user.profile };
+    // state = { name: this.props.user["Name"], username: this.props.user["Username"], email: this.props.user["Email Address"], userGroup: this.props.user["Group"], profile: this.props.user["Profile"] };
+    // state = {editedUser: this.props.user}
 
     formRef = React.createRef();
 
@@ -58,17 +59,17 @@ export default class AddModal extends React.Component {
 
                                     <FormControl sx={{ mt: "14px" }} fullWidth>
                                         Full Name
-                                        <TextField defaultValue={this.state?.name} placeholder={"Enter full name"} name='name' />
+                                        <TextField defaultValue={this.props.user?.["Name"]} placeholder="Enter full name" name="name" />
                                     </FormControl>
 
                                     <FormControl sx={{ mt: "14px" }} fullWidth >
                                         Username
-                                        <TextField defaultValue={this.state?.username} placeholder={"Enter username"} name='username' />
+                                        <TextField defaultValue={this.props.user?.["Username"]} placeholder={"Enter username"} name='username' />
                                     </FormControl>
 
                                     <FormControl sx={{ mt: "14px" }} fullWidth >
                                         Email Address
-                                        <TextField defaultValue={this.state?.email} placeholder={"Enter user email address"} name='email' />
+                                        <TextField defaultValue={this.props.user?.["Email Address"]} placeholder={"Enter user email address"} name='email' />
                                     </FormControl>
 
                                     <FormControl sx={{ mt: "14px" }} fullWidth>
@@ -76,9 +77,9 @@ export default class AddModal extends React.Component {
                                         <FormControl fullWidth>
                                             <InputLabel id="group-select-label">Choose user group</InputLabel>
                                             <Select id="groupSelect" defaultValue={''} name="userGroup" onFocus={() => this.hideLabel("group-select-label")}>
-                                                <MenuItem value="office">Office</MenuItem>
-                                                <MenuItem value="mangers">Managers</MenuItem>
-                                                <MenuItem value="head">Head Office</MenuItem>
+                                                <MenuItem value="Office">Office</MenuItem>
+                                                <MenuItem value="Managers">Managers</MenuItem>
+                                                <MenuItem value="Head Office">Head Office</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </FormControl>
@@ -89,9 +90,9 @@ export default class AddModal extends React.Component {
 
                                             <InputLabel id="profile-select-label">Choose profile</InputLabel>
                                             <Select id="profileSelect" defaultValue={''} name="profile" onFocus={() => this.hideLabel("profile-select-label")}>
-                                                <MenuItem value="active">Active</MenuItem>
-                                                <MenuItem value="inactive">Inactive</MenuItem>
-                                                <MenuItem value="locked">Locked</MenuItem>
+                                                <MenuItem value="Active">Active</MenuItem>
+                                                <MenuItem value="Inactive">Inactive</MenuItem>
+                                                <MenuItem value="Locked">Locked</MenuItem>
                                             </Select>
                                         </FormControl>
 

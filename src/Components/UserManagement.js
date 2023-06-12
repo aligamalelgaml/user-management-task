@@ -16,22 +16,38 @@ const initalData = [{"id":1,"Name":"Ina","Username":"ibenka0","Email Address":"i
 {"id":8,"Name":"Frederico","Username":"fnelm7","Email Address":"fridler7@ow.ly","Group":"Business Development","Created On":"3/5/2023","Profile":"Inactive"}]
 
 class UserManagement extends React.Component {
-    state = {modalState: false, users: initalData};
+    state = {modalState: false, users: initalData, toEditUser: {}};
 
     toggleModal = () => {
-        this.setState({modalState: !this.state.modalState})
+        this.setState({toEditUser: {}, modalState: !this.state.modalState})
     }
 
-    addUser = (user) => {
-        const date = new Date().toLocaleDateString();
-        
-        user = {...user, id: Number(this.state.users.length + 1), "Created On": date}
+    addUser = (newUser) => {
+        if(this.state.users.some((user) => user["Username"] === newUser["Username"])) {
+            console.log("Updating..")
+            console.log(newUser);
 
-        this.setState({users: this.state.users.concat(user)}, () => {
-            console.log("adding ", user);
-        })
+            const updatedUsers = this.state.users.map(user => (user["Username"] === newUser["Username"] ? {...user, ...newUser} : user)); 
+
+            console.log(updatedUsers);
+
+            this.setState({users: updatedUsers});
+        } else {
+            console.log("Adding..")
+
+            const date = new Date().toLocaleDateString();
+            const addedUser = {...newUser, id: Number(this.state.users.length + 1), "Created On": date}
+    
+            this.setState({users: this.state.users.concat(addedUser)}, () => {
+                console.log("adding ", addedUser);
+            })
+        }
     }
 
+    editUser = (editedUser) => {
+        console.log("Editing ", editedUser)
+        this.setState({toEditUser: editedUser, modalState: !this.state.modalState})
+    }
 
     render() {
         return (
@@ -50,10 +66,10 @@ class UserManagement extends React.Component {
                     </Grid>
                 </Container>
 
-                <AddModal status={this.state.modalState} toggle={this.toggleModal} addUser={this.addUser} user={{}}></AddModal>
+                <AddModal status={this.state.modalState} toggle={this.toggleModal} addUser={this.addUser} user={this.state.toEditUser}></AddModal>
 
                 <Container>
-                    <UserTable data={this.state.users}/>
+                    <UserTable data={this.state.users} editUser={this.editUser}/>
                 </Container>
             </>
         )

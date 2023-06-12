@@ -11,25 +11,13 @@ const columns = [
   { field: 'Group', headerName: 'Group', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
   { field: 'Profile', headerName: 'Profile', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
   { field: 'Created On', headerName: 'Created On', flex: 1,  align: 'center', headerAlign: 'center', disableColumnMenu: true},
-  // {
-  //   field: 'fullName',
-  //   headerName: 'Full name',
-  //   description: 'This column has a value getter and is not sortable.',
-  //   sortable: false,
-  //   width: 160,
-  //   valueGetter: (params) =>
-  //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-  // },
 ];
 
 export default class BasicTable extends React.Component {
   
-  handleCellClick = (params) => {
-    console.log('Cell clicked:', params);
-  };
-  
   handleRowClick = (params) => {
-    console.log('Row clicked:', params);
+    const data = JSON.parse(JSON.stringify(params))
+    this.props.editUser(data.row);
   };
 
   render() {
@@ -41,7 +29,6 @@ export default class BasicTable extends React.Component {
           rows={this.props.data}
           columns={columns}
           checkboxSelection
-          // onCellClick={this.handleCellClick}
           onRowClick={this.handleRowClick}
         />
 
