@@ -5,3 +5,20 @@
 body {
     background-color: #f8fafb !important;
 }
+
+#addModalTitle {
+    color: white;
+    background-color: #050e2d;
+    padding: 20px;
+}
+
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 45vw;
+    background-color: #f8fafb;
+    border: 2px solid #000;
+    border-radius: 5px;
+}
