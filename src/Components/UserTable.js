@@ -5,10 +5,11 @@ import { Grid } from '@mui/material';
 
 const columns = [
   { field: 'id', headerName: 'ID', flex: 0,  align: 'center',  headerAlign: 'center', disableColumnMenu: true },
-  { field: 'Name', headerName: 'First name', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
+  { field: 'Name', headerName: 'Full name', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
   { field: 'Username', headerName: 'Username', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
   { field: 'Email Address', headerName: 'Email Address', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
   { field: 'Group', headerName: 'Group', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
+  { field: 'Profile', headerName: 'Profile', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
   { field: 'Created On', headerName: 'Created On', flex: 1,  align: 'center', headerAlign: 'center', disableColumnMenu: true},
   // {
   //   field: 'fullName',
@@ -23,8 +24,6 @@ const columns = [
 
 export default class BasicTable extends React.Component {
   
-  rows = this.props.data;
-
   handleCellClick = (params) => {
     console.log('Cell clicked:', params);
   };
@@ -39,7 +38,7 @@ export default class BasicTable extends React.Component {
         <Grid item xs={12}>
 
         <DataGrid
-          rows={this.rows}
+          rows={this.props.data}
           columns={columns}
           checkboxSelection
           // onCellClick={this.handleCellClick}

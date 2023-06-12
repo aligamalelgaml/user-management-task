@@ -11,17 +11,18 @@ export default class AddModal extends React.Component {
 
     formRef = React.createRef();
 
-    handleSubmit(event) {
+    handleSubmit = (event) => {
         event.preventDefault(); // Prevent the default form submission behavior
 
         // Access the form field values using the event.target object
         const { name, username, email, userGroup, profile } = event.target.elements;
 
-
-        console.log(name.value, username.value, email.value, userGroup.value, profile.value);
+        const newUser = {"Name": name.value, "Username": username.value, "Email Address": email.value, "Group": userGroup.value, "Profile": profile.value}
 
         // Reset the form fields
         event.target.reset();
+
+        this.props.addUser(newUser);
     }
 
     hideLabel(id) {
@@ -30,6 +31,10 @@ export default class AddModal extends React.Component {
 
     resetFields = () => {
         this.formRef.current.reset();
+        // document.getElementById("profileSelect").value = ''; replace with setstate to update? maybe.
+        // document.getElementById("groupSelect").value = '';
+        document.getElementById("profile-select-label").style.display = 'block';
+        document.getElementById("group-select-label").style.display = 'block';
     }
 
 
@@ -70,10 +75,10 @@ export default class AddModal extends React.Component {
                                         User Group
                                         <FormControl fullWidth>
                                             <InputLabel id="group-select-label">Choose user group</InputLabel>
-                                            <Select defaultValue={''} name="userGroup" onFocus={() => this.hideLabel("group-select-label")}>
-                                                <MenuItem value="option1">Option 1</MenuItem>
-                                                <MenuItem value="option2">Option 2</MenuItem>
-                                                <MenuItem value="option3">Option 3</MenuItem>
+                                            <Select id="groupSelect" defaultValue={''} name="userGroup" onFocus={() => this.hideLabel("group-select-label")}>
+                                                <MenuItem value="office">Office</MenuItem>
+                                                <MenuItem value="mangers">Managers</MenuItem>
+                                                <MenuItem value="head">Head Office</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </FormControl>
@@ -83,15 +88,20 @@ export default class AddModal extends React.Component {
                                         <FormControl fullWidth>
 
                                             <InputLabel id="profile-select-label">Choose profile</InputLabel>
-                                            <Select defaultValue={''} name="profile" onFocus={() => this.hideLabel("profile-select-label")}>
-                                                <MenuItem value="option1">Option 1</MenuItem>
-                                                <MenuItem value="option2">Option 2</MenuItem>
-                                                <MenuItem value="option3">Option 3</MenuItem>
+                                            <Select id="profileSelect" defaultValue={''} name="profile" onFocus={() => this.hideLabel("profile-select-label")}>
+                                                <MenuItem value="active">Active</MenuItem>
+                                                <MenuItem value="inactive">Inactive</MenuItem>
+                                                <MenuItem value="locked">Locked</MenuItem>
                                             </Select>
                                         </FormControl>
+
                                     </FormControl>
+                                    
+                                
+                                    <hr style={{ margin: '30px 0' }} />
 
                                     <Grid container sx={{mt: "25px"}}>
+
                                         <Grid item xs={12}>
                                             <Grid container justifyContent="space-between">
                                                 <Grid item xs={4}>
@@ -110,20 +120,6 @@ export default class AddModal extends React.Component {
                                             </Grid>
                                         </Grid>
                                     </Grid>
-
-                                    {/* <Grid container>
-                                        <Grid item xs={6} alignContent={'center'}>
-                                            <Button variant="contained" color="primary">
-                                                Start Button
-                                            </Button>
-                                        </Grid>
-
-                                        <Grid item xs={6} container justifyContent="flex-end">
-                                            <Button type='submit' sx={{ mt: "20px" }} className='greenBtn' variant="contained" color="primary">
-                                                Add User
-                                            </Button>
-                                        </Grid>
-                                    </Grid> */}
 
                                 </form>
                             </Grid>

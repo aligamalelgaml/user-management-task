@@ -6,23 +6,30 @@ import Container from '@mui/material/Container';
 import UserTable from "./UserTable";
 import AddModal from './AddModal';
 
-const data = [{"id":1,"Name":"Sonnie Link","Username":"slink0","Email Address":"slink0@tuttocitta.it","Group":"Training","Created On":"09.10.2022"},
-{"id":2,"Name":"Jerri Catley","Username":"jcatley1","Email Address":"jcatley1@sohu.com","Group":"Product Management","Created On":"14.08.2022"},
-{"id":3,"Name":"Heloise Killbey","Username":"hkillbey2","Email Address":"hkillbey2@tamu.edu","Group":"Training","Created On":"04.06.2023"},
-{"id":4,"Name":"Rhody Wartonby","Username":"rwartonby3","Email Address":"rwartonby3@myspace.com","Group":"Product Management","Created On":"22.09.2022"},
-{"id":5,"Name":"Wynne Trudgion","Username":"wtrudgion4","Email Address":"wtrudgion4@yolasite.com","Group":"Accounting","Created On":"27.10.2022"},
-{"id":6,"Name":"Myranda Mendel","Username":"mmendel5","Email Address":"mmendel5@myspace.com","Group":"Research and Development","Created On":"20.06.2022"},
-{"id":7,"Name":"Yves Appleton","Username":"yappleton6","Email Address":"yappleton6@qq.com","Group":"Research and Development","Created On":"23.03.2023"},
-{"id":8,"Name":"Skip Negal","Username":"snegal7","Email Address":"snegal7@cocolog-nifty.com","Group":"Sales","Created On":"11.10.2022"},
-{"id":9,"Name":"Cristie Kurth","Username":"ckurth8","Email Address":"ckurth8@telegraph.co.uk","Group":"Engineering","Created On":"18.06.2022"},
-{"id":10,"Name":"Mia Shore","Username":"mshore9","Email Address":"mshore9@so-net.ne.jp","Group":"Product Management","Created On":"31.08.2022"},
-];
+const initalData = [{"id":1,"Name":"Ina","Username":"ibenka0","Email Address":"imarkson0@oaic.gov.au","Group":"Research and Development","Created On":"26/12/2022","Profile":"Active"},
+{"id":2,"Name":"Riobard","Username":"rlettice1","Email Address":"rcavell1@topsy.com","Group":"Engineering","Created On":"16/7/2022","Profile":"Active"},
+{"id":3,"Name":"Caryl","Username":"cdall2","Email Address":"cmarquez2@wordpress.com","Group":"Business Development","Created On":"25/12/2022","Profile":"Locked"},
+{"id":4,"Name":"Sheena","Username":"ssturton3","Email Address":"shaydn3@wired.com","Group":"Research and Development","Created On":"20/1/2023","Profile":"Locked"},
+{"id":5,"Name":"Sallee","Username":"skenson4","Email Address":"skohneke4@nyu.edu","Group":"Product Management","Created On":"6/10/2022","Profile":"Locked"},
+{"id":6,"Name":"Diana","Username":"dchoake5","Email Address":"dbadland5@i2i.jp","Group":"Sales","Created On":"13/5/2023","Profile":"Inactive"},
+{"id":7,"Name":"Kory","Username":"kgunnell6","Email Address":"kmurkin6@plala.or.jp","Group":"Engineering","Created On":"18/1/2023","Profile":"Inactive"},
+{"id":8,"Name":"Frederico","Username":"fnelm7","Email Address":"fridler7@ow.ly","Group":"Business Development","Created On":"3/5/2023","Profile":"Inactive"}]
 
 class UserManagement extends React.Component {
-    state = {modalState: false, data: data};
+    state = {modalState: false, users: initalData};
 
     toggleModal = () => {
         this.setState({modalState: !this.state.modalState})
+    }
+
+    addUser = (user) => {
+        const date = new Date().toLocaleDateString();
+        
+        user = {...user, id: Number(this.state.users.length + 1), "Created On": date}
+
+        this.setState({users: this.state.users.concat(user)}, () => {
+            console.log("adding ", user);
+        })
     }
 
 
@@ -43,10 +50,10 @@ class UserManagement extends React.Component {
                     </Grid>
                 </Container>
 
-                <AddModal status={this.state.modalState} toggle={this.toggleModal} user={{}}></AddModal>
+                <AddModal status={this.state.modalState} toggle={this.toggleModal} addUser={this.addUser} user={{}}></AddModal>
 
                 <Container>
-                    <UserTable data={this.state.data}/>
+                    <UserTable data={this.state.users}/>
                 </Container>
             </>
         )
