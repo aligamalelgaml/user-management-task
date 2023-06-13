@@ -29,6 +29,9 @@ export default class AddModal extends React.Component {
 
     resetFields = () => {
         this.formRef.current.reset(); // resets textfields only.
+        console.log(document.getElementById("groupSelect"));
+        document.getElementById("groupSelect").textContent = null;
+        document.getElementById("profileSelect").textContent = null;
         // this.props.reset();
     }
 
@@ -53,24 +56,24 @@ export default class AddModal extends React.Component {
 
                                     <FormControl sx={{ mt: "14px" }} fullWidth>
                                         Full Name
-                                        <TextField defaultValue={this.props.user?.["Name"]} placeholder="Enter full name" name="name" />
+                                        <TextField required defaultValue={this.props.user?.["Name"]} placeholder="Enter full name" name="name" />
                                     </FormControl>
 
                                     <FormControl sx={{ mt: "14px" }} fullWidth >
                                         Username
-                                        <TextField defaultValue={this.props.user?.["Username"]} placeholder={"Enter username"} name='username' />
+                                        <TextField required defaultValue={this.props.user?.["Username"]} placeholder={"Enter username"} name='username' />
                                     </FormControl>
 
                                     <FormControl sx={{ mt: "14px" }} fullWidth >
                                         Email Address
-                                        <TextField defaultValue={this.props.user?.["Email Address"]} placeholder={"Enter user email address"} name='email' />
+                                        <TextField required defaultValue={this.props.user?.["Email Address"]} placeholder={"Enter user email address"} name='email' />
                                     </FormControl>
 
                                     <FormControl sx={{ mt: "14px" }} fullWidth>
                                         User Group
                                         <FormControl fullWidth>
                                         {!this.props.user?.["Group"] && <InputLabel id="group-select-label">Choose user group</InputLabel>}
-                                            <Select id="groupSelect" defaultValue={this.props.user?.["Group"] !== undefined ? this.props.user?.["Group"] : ""} name="userGroup" onFocus={() => this.hideLabel("group-select-label")}>
+                                            <Select required id="groupSelect" defaultValue={this.props.user?.["Group"] !== undefined ? this.props.user?.["Group"] : ""} name="userGroup" onFocus={() => this.hideLabel("group-select-label")}>
                                                 <MenuItem value="Office">Office</MenuItem>
                                                 <MenuItem value="Managers">Managers</MenuItem>
                                                 <MenuItem value="Head Office">Head Office</MenuItem>
@@ -82,7 +85,7 @@ export default class AddModal extends React.Component {
                                         User Profile
                                         <FormControl fullWidth>
                                             {!this.props.user?.["Profile"] && <InputLabel id="profile-select-label">Choose profile</InputLabel>}
-                                            <Select
+                                            <Select required
                                                 id="profileSelect"
                                                 defaultValue={this.props.user?.["Profile"] !== undefined ? this.props.user?.["Profile"] : ""}
                                                 name="profile"

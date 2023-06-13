@@ -1,15 +1,10 @@
 import * as React from 'react';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
 
 export default function DrawerList() {
   const [open, setOpen] = React.useState(true);
@@ -30,35 +25,56 @@ export default function DrawerList() {
       component="nav"
       aria-labelledby="nested-list-subheader"
     >
-      <ListItemButton>
-        <ListItemIcon style={{ color: 'white', fontSize: "12" }}>
-          <SendIcon />
-        </ListItemIcon>
+      <ListItemButton
+        sx={{
+          "&:hover": {
+            backgroundColor: "inherit",
+          },
+        }}
+      >
         <ListItemText primary="ATM Settings" primaryTypographyProps={{fontSize: '14px', whiteSpace: 'nowrap'}} />
       </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon style={{ color: 'white', fontSize: "12" }}>
-          <DraftsIcon />
-        </ListItemIcon>
+      <ListItemButton
+        sx={{
+          "&:hover": {
+            backgroundColor: "inherit",
+          },
+        }}
+      >
         <ListItemText primary="Business Setup" primaryTypographyProps={{fontSize: '14px', whiteSpace: 'nowrap'}} />
       </ListItemButton>
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon style={{ color: 'white', fontSize: "12" }}>
-          <InboxIcon />
-        </ListItemIcon>
+      <ListItemButton
+        onClick={handleClick}
+        sx={{
+          backgroundColor: open ? '#008000' : 'initial',
+          "&:hover": {
+            backgroundColor: open ? '#008000' : 'initial',
+          },
+        }}
+      >
         <ListItemText primary="User Management" primaryTypographyProps={{fontSize: '14px', whiteSpace: 'nowrap'}} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon style={{ color: 'white' }}>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
+            <ListItemText primary="Users" primaryTypographyProps={{fontSize: '14px', whiteSpace: 'nowrap'}}/>
+          </ListItemButton>
+
+          <ListItemButton sx={{ pl: 4 }}>
+
+            <ListItemText primary="Profiles" primaryTypographyProps={{fontSize: '14px', whiteSpace: 'nowrap'}} />
+          </ListItemButton>
+
+          <ListItemButton sx={{ pl: 4 }}>
+            <ListItemText primary="Groups" primaryTypographyProps={{fontSize: '14px', whiteSpace: 'nowrap'}}/>
           </ListItemButton>
         </List>
       </Collapse>
+
+      <ListItemButton>
+        <ListItemText primary="License Management" primaryTypographyProps={{fontSize: '14px', whiteSpace: 'nowrap'}} />
+      </ListItemButton>
     </List>
   );
 }
