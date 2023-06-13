@@ -29,7 +29,7 @@ export default class AddModal extends React.Component {
 
     resetFields = () => {
         this.formRef.current.reset(); // resets textfields only.
-        // this.props.reset(); WIP
+        // this.props.reset();
     }
 
 
