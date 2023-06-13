@@ -20,6 +20,9 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import UserManagement from './UserManagement';
+import renoImage from '../Assets/reno.png';
+import { Avatar } from '@mui/material';
+
 
 const drawerWidth = 240;
 
@@ -113,12 +116,10 @@ export default function PersistentDrawerLeft() {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
+        <Avatar src='../Assets/reno.png'>
+
+        </Avatar>
+
         <List>
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem key={text} disablePadding>
