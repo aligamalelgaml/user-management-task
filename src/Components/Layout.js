@@ -15,7 +15,9 @@ import IconButton from '@mui/material/IconButton';
 import DrawerList from './DrawerList';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Avatar } from '@mui/material';
 
 
 
@@ -43,6 +45,8 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
+  background: "white",
+  color: "black",
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -82,22 +86,38 @@ export default function PersistentDrawerLeft() {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Good Morning! {new Date(Date.now()).toLocaleString()}
-          </Typography>
-          
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+
+            <Typography className='headerFont'>
+              <span style={{ "fontWeight": "bold" }}>Good Morning! </span> {new Date(Date.now()).toLocaleString()}
+            </Typography>
+          </div>
+
+
+          <div style={{display: "flex", alignItems: "center"}}>
+            <HelpOutlineIcon />
+            <NotificationsIcon style={{marginLeft: "20px"}} />
+            <Typography style={{marginLeft: "20px", marginRight:"15px"}}>
+              Nader Amer
+            </Typography>
+            <Avatar>
+              NA
+            </Avatar>
+          </div>
         </Toolbar>
       </AppBar>
+
+
       <Drawer
         sx={{
           width: drawerWidth,
@@ -115,30 +135,30 @@ export default function PersistentDrawerLeft() {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon style={{color: "white"}} /> : <ChevronRightIcon />}
+            {theme.direction === 'ltr' ? <ChevronLeftIcon style={{ color: "white" }} /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
 
-        <img src={renoImage} alt=""/>
+        <img src={renoImage} alt="" />
 
-      <Box sx={{padding:"20px"}}>
-        <Typography>
-              <DashboardIcon/> Dashboard
-        </Typography>
+        <Box sx={{ padding: "20px" }}>
+          <Typography>
+            <DashboardIcon /> Dashboard
+          </Typography>
 
-        <Typography className='silverText' mt={"20px"}>
-          SETTINGS
-        </Typography>
+          <Typography className='silverText' mt={"20px"}>
+            SETTINGS
+          </Typography>
 
-        <DrawerList/>
-      </Box>
+          <DrawerList />
+        </Box>
 
 
-        
+
       </Drawer>
       <Main open={open}>
-        <DrawerHeader  />
-        <UserManagement/>
+        <DrawerHeader />
+        <UserManagement />
       </Main>
     </Box>
   );
