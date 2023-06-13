@@ -10,7 +10,13 @@ class UserManagement extends React.Component {
     state = {modalState: false, users: [], toEditUser: {}};
 
     toggleModal = () => {
+        console.log("toggling");
         this.setState({toEditUser: {}, modalState: !this.state.modalState})
+    }
+
+    resetModal = () => {
+        console.log("resetting");
+        this.setState({toEditUser: {}});
     }
 
     addUser = (newUser) => {
@@ -52,7 +58,7 @@ class UserManagement extends React.Component {
                     </Grid>
                 </Container>
 
-                <AddModal status={this.state.modalState} toggle={this.toggleModal} addUser={this.addUser} user={this.state.toEditUser}></AddModal>
+                <AddModal status={this.state.modalState} toggle={this.toggleModal} reset={this.resetModal} addUser={this.addUser} user={this.state.toEditUser}></AddModal>
 
                 <Container>
                     <UserTable data={this.state.users} editUser={this.editUser}/>

@@ -7,54 +7,29 @@ import { Grid, Button, FormControl, TextField, Select, MenuItem, InputLabel } fr
 
 
 export default class AddModal extends React.Component {
-    state = {
-        userGroup: this.props.user["Group"] ?  this.props.user["Group"] : '',
-        userProfile: this.props.user["Profile"] ? this.props.user["Profile"] : ''
-    };
-
     formRef = React.createRef();
 
     handleSubmit = (event) => {
         event.preventDefault(); // Prevent the default form submission behavior
 
-        // Access the form field values using the event.target object except user group and profile (select elements are best controlled)
-        const { name, username, email } = event.target.elements;
+        // Access the form field values using the event.target object
+        const { name, username, email, userGroup, profile } = event.target.elements;
 
-        const newUser = {"Name": name.value, "Username": username.value, "Email Address": email.value, "Group": this.state.userGroup, "Profile": this.state.userProfile}
+        const newUser = { "Name": name.value, "Username": username.value, "Email Address": email.value, "Group": userGroup.value, "Profile": profile.value }
 
-        // Reset the form fields
-        this.handleCancel();
+        // Closes form
+        this.props.toggle();
 
         this.props.addUser(newUser);
     }
 
-    resetFields = () => {
-        const formElements = this.formRef.current.elements;
-
-        for (let i = 0; i < formElements.length; i++) {
-            const element = formElements[i];
-            if (element.tagName.toLowerCase() === 'input') {
-              element.value = '';
-            }
-        }
-
-        this.setState({
-            userGroup: '',
-            userProfile: ''
-        });
+    hideLabel(id) {
+        document.getElementById(id).style.display = 'none';
     }
 
-    handleUserGroupChange = (event) => {
-        this.setState({ userGroup: event.target.value });
-    };
-    
-    handleProfileChange = (event) => {
-        this.setState({ userProfile: event.target.value });
-    };
-
-    handleCancel = () => {
-        this.resetFields();
-        this.props.toggle();
+    resetFields = () => {
+        this.formRef.current.reset(); // resets textfields only.
+        // this.props.reset(); WIP
     }
 
 
@@ -94,11 +69,8 @@ export default class AddModal extends React.Component {
                                     <FormControl sx={{ mt: "14px" }} fullWidth>
                                         User Group
                                         <FormControl fullWidth>
-                                            {this.state.userGroup === ''
-                                            ? <InputLabel id="group-select-label">Choose user group</InputLabel>
-                                            : null}
-            
-                                            <Select id="groupSelect" value={this.state.userGroup} onChange={this.handleUserGroupChange} name="userGroup">
+                                        {!this.props.user?.["Group"] && <InputLabel id="group-select-label">Choose user group</InputLabel>}
+                                            <Select id="groupSelect" defaultValue={this.props.user?.["Group"] !== undefined ? this.props.user?.["Group"] : ""} name="userGroup" onFocus={() => this.hideLabel("group-select-label")}>
                                                 <MenuItem value="Office">Office</MenuItem>
                                                 <MenuItem value="Managers">Managers</MenuItem>
                                                 <MenuItem value="Head Office">Head Office</MenuItem>
@@ -109,22 +81,24 @@ export default class AddModal extends React.Component {
                                     <FormControl sx={{ mt: "10px" }} fullWidth>
                                         User Profile
                                         <FormControl fullWidth>
-                                        {this.state.userProfile === ''
-                                            ? <InputLabel id="profile-select-label">Choose profile</InputLabel>
-                                            : null}              
-                                            <Select id="profileSelect" value={this.state.userProfile} onChange={this.handleProfileChange} name="profile">
+                                            {!this.props.user?.["Profile"] && <InputLabel id="profile-select-label">Choose profile</InputLabel>}
+                                            <Select
+                                                id="profileSelect"
+                                                defaultValue={this.props.user?.["Profile"] !== undefined ? this.props.user?.["Profile"] : ""}
+                                                name="profile"
+                                                onFocus={() => this.hideLabel("profile-select-label")}
+                                            >
                                                 <MenuItem value="Active">Active</MenuItem>
                                                 <MenuItem value="Inactive">Inactive</MenuItem>
                                                 <MenuItem value="Locked">Locked</MenuItem>
                                             </Select>
                                         </FormControl>
-
                                     </FormControl>
-                                    
-                                
+
+
                                     <hr style={{ margin: '30px 0' }} />
 
-                                    <Grid container sx={{mt: "25px"}}>
+                                    <Grid container sx={{ mt: "25px" }}>
 
                                         <Grid item xs={12}>
                                             <Grid container justifyContent="space-between">
@@ -134,12 +108,12 @@ export default class AddModal extends React.Component {
                                                     </Button>
                                                 </Grid>
                                                 <Grid item xs={8} container justifyContent="flex-end">
-                                                    <Button onClick={this.handleCancel} variant="outlined" color="primary">
+                                                    <Button onClick={this.props.toggle} variant="outlined" color="primary">
                                                         Cancel
                                                     </Button>
-                                                    <Button type='submit' sx={{ml: "20px"}} variant="contained" color="success">
-                                                Add User
-                                            </Button>
+                                                    <Button type='submit' sx={{ ml: "20px" }} variant="contained" color="success">
+                                                        Add User
+                                                    </Button>
                                                 </Grid>
                                             </Grid>
                                         </Grid>
