@@ -26,12 +26,14 @@ export default class BasicTable extends React.Component {
         <Grid item xs={12}>
 
         <DataGrid
-          rows={this.props.data}
+          rows={(this.props.data).length > 0 ? this.props.data : []}
           columns={columns}
           checkboxSelection
+          localeText={{
+            noRowsLabel: <></>,
+          }}
           onRowClick={this.handleRowClick}
         />
-
         </Grid>
       </Grid>
     );
