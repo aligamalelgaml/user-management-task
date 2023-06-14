@@ -16,7 +16,7 @@ const data = [{ "id": 1, "Name": "Ina", "Username": "ibenka0", "Email Address": 
 { "id": 8, "Name": "Frederico", "Username": "fnelm7", "Email Address": "fridler7@ow.ly", "Group": "Office", "Created On": "3/5/2023", "Profile": "Locked" }]
 
 class UserManagement extends React.Component {
-    state = { modalState: false, users: data, toEditUser: {}, searchResults: null };
+    state = { modalState: false, users: data, toEditUser: {}, searchResults: data, userSearchResults: data, statusSearchResults: data ,allResults: [] };
 
     toggleModal = () => {
         console.log("toggling");
@@ -46,7 +46,19 @@ class UserManagement extends React.Component {
     }
 
     search = (searchText) => {
-        const matchingSearch = this.state.users.filter((user) => {
+        let matchingSearch;
+
+        if(searchText === "") {
+            matchingSearch = this.state.users;
+        } else {
+            matchingSearch = this.__genericContainsSearch(this.state.users, searchText);
+        }
+
+        this.setState({searchResults: matchingSearch}, () => this.handleAllResults())
+    }
+
+    __genericContainsSearch = (searchedArray, searchText) => {
+        return searchedArray.filter((user) => {
             return Object.values(user).some((attribute) => {
                 if (typeof attribute === "string") {
                     return attribute.toLowerCase().includes(searchText.toLowerCase());
@@ -54,8 +66,43 @@ class UserManagement extends React.Component {
                 return false;
             })
         })
+    }
+    
+    userSearch = (userSearchText) => {
+        let matchingSearch;
+        console.log("userSearchText:", userSearchText);
 
-        this.setState({searchResults: matchingSearch})
+        if(userSearchText !== "") {
+            matchingSearch = this.state.users.filter((user) => user["Username"] === userSearchText);
+        } else {
+            matchingSearch = this.state.users;
+        }
+
+        this.setState({userSearchResults: matchingSearch}, () => this.handleAllResults());
+    }
+
+    statusSearch = (status) => {
+        let matchingSearch;
+        console.log("status:", status);
+
+
+        if(status !== "any") {
+            matchingSearch = this.state.users.filter((user) => user["Profile"].toLocaleLowerCase() === status);
+        } else {
+            matchingSearch = this.state.users;
+        }
+
+        this.setState({statusSearchResults: matchingSearch}, () => this.handleAllResults())
+    }
+
+    handleAllResults = () => {
+        const { searchResults, userSearchResults, statusSearchResults} = this.state;
+
+        const results = searchResults.filter((searchResult) => {
+            return userSearchResults.some(userSearchResult => searchResult.id === userSearchResult.id) && statusSearchResults.some(statusSearchResult => searchResult.id === statusSearchResult.id);
+        })
+            
+        this.setState({ allResults: results });
     }
 
     render() {
@@ -78,7 +125,7 @@ class UserManagement extends React.Component {
                 <AddModal status={this.state.modalState} toggle={this.toggleModal} addUser={this.addUser} user={this.state.toEditUser}></AddModal>
 
                 <Container>
-                    <UserTable data={this.state.users} editUser={this.editUser} search={this.search} searchResults={this.state.searchResults} />
+                    <UserTable data={this.state.users} editUser={this.editUser} search={this.search} userSearch={this.userSearch} selectSearch={this.statusSearch} searchResults={this.state.allResults} />
                 </Container>
             </>
         )

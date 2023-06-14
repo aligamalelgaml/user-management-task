@@ -72,7 +72,7 @@ const columns = [
 
 export default class BasicTable extends React.Component {
 
-  state = {search : ""};
+  state = {search : "", userSearch : "", status: "any"};
 
   handleSearch = (e) => {
     this.setState({search: e.target.value}, () => 
@@ -80,6 +80,17 @@ export default class BasicTable extends React.Component {
     )
   }
 
+  handleUserSearch = (e) => {
+    this.setState({userSearch: e.target.value}, () => 
+    this.props.userSearch(this.state.userSearch)
+    )
+  }
+
+  handleSelect = (e) => {
+    this.setState({status: e.target.value}, () => 
+    this.props.selectSearch(this.state.status)
+    )
+  }
 
   handleRowClick = (params) => {
     const data = JSON.parse(JSON.stringify(params));
@@ -89,10 +100,9 @@ export default class BasicTable extends React.Component {
   render() {
     let rowData;
 
-    if(this.state.search === "") {
+    if(this.state.search === "" && this.state.userSearch === "" && this.state.status === "any") {
       rowData = this.props.data.length > 0 ? this.props.data : [];
     } else {
-      console.log(this.props.searchResults);
       rowData = this.props.searchResults ? this.props.searchResults : [];
     }
 
@@ -129,6 +139,8 @@ export default class BasicTable extends React.Component {
                 <TextField
                   size="small"
                   placeholder="User Name"
+                  value={this.state.userSearch}
+                  onChange={this.handleUserSearch}
                   sx={{ width: "140px" }}
                 />
               </Grid>
@@ -141,7 +153,8 @@ export default class BasicTable extends React.Component {
                   <Select
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
-                    defaultValue={"any"}
+                    value={this.state.status}
+                    onChange={this.handleSelect}
                     label="User Status"
                     size="small"
                   >
