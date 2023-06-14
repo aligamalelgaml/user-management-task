@@ -16,7 +16,7 @@ const data = [{ "id": 1, "Name": "Ina", "Username": "ibenka0", "Email Address": 
 { "id": 8, "Name": "Frederico", "Username": "fnelm7", "Email Address": "fridler7@ow.ly", "Group": "Office", "Created On": "3/5/2023", "Profile": "Locked" }]
 
 class UserManagement extends React.Component {
-    state = { modalState: false, users: data, toEditUser: {}, searchResults: data, userSearchResults: data, statusSearchResults: data ,allResults: [] };
+    state = { modalState: false, users: data, toEditUser: {}, searchResults: data, userSearchResults: data, statusSearchResults: data, dateSearchResults: data, allResults: [] };
 
     toggleModal = () => {
         console.log("toggling");
@@ -95,6 +95,14 @@ class UserManagement extends React.Component {
         this.setState({statusSearchResults: matchingSearch}, () => this.handleAllResults())
     }
 
+    /**
+     * This does nothing at the moment as it would be nonsensical to search for only a certain date and MUI's date picker does not allow setting a null value on it, so we cannot revert to 'All Time' filtering.
+     * @param {*} date 
+     */
+    dateSearch = (date) => {
+        let matchingSearch;
+    }
+
     handleAllResults = () => {
         const { searchResults, userSearchResults, statusSearchResults} = this.state;
 
@@ -125,7 +133,7 @@ class UserManagement extends React.Component {
                 <AddModal status={this.state.modalState} toggle={this.toggleModal} addUser={this.addUser} user={this.state.toEditUser}></AddModal>
 
                 <Container>
-                    <UserTable data={this.state.users} editUser={this.editUser} search={this.search} userSearch={this.userSearch} selectSearch={this.statusSearch} searchResults={this.state.allResults} />
+                    <UserTable data={this.state.users} editUser={this.editUser} search={this.search} userSearch={this.userSearch} selectSearch={this.statusSearch} dateSearch={this.dateSearch} searchResults={this.state.allResults} />
                 </Container>
             </>
         )

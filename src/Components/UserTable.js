@@ -72,30 +72,29 @@ const columns = [
 
 export default class BasicTable extends React.Component {
 
-  state = {search : "", userSearch : "", status: "any"};
+  state = {search : "", userSearch : "", status: "any", date: ""};
 
   handleSearch = (e) => {
-    this.setState({search: e.target.value}, () => 
-      this.props.search(this.state.search)
-    )
+    this.setState({search: e.target.value}, () => this.props.search(this.state.search))
   }
 
   handleUserSearch = (e) => {
-    this.setState({userSearch: e.target.value}, () => 
-    this.props.userSearch(this.state.userSearch)
-    )
+    this.setState({userSearch: e.target.value}, () => this.props.userSearch(this.state.userSearch))
   }
 
   handleSelect = (e) => {
-    this.setState({status: e.target.value}, () => 
-    this.props.selectSearch(this.state.status)
-    )
+    this.setState({status: e.target.value}, () => this.props.selectSearch(this.state.status))
+  }
+
+  handleDate = (date) => {
+    this.setState({date: date}, () => this.props.dateSearch(this.state.date))
   }
 
   handleRowClick = (params) => {
     const data = JSON.parse(JSON.stringify(params));
     this.props.editUser(data.row);
   };
+
 
   render() {
     let rowData;
@@ -168,8 +167,8 @@ export default class BasicTable extends React.Component {
 
               <Grid item>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker label="Creation Date" defaultValue={dayjs('2023-06-14')}
-                    slotProps={{ textField: { size: 'small' } }}
+                  <DatePicker label="Creation Date" Value={this.state.date} onChange={this.handleDate}
+                    slotProps={{ textField: { size: 'small'} }}
                   />
                 </LocalizationProvider>
               </Grid>
