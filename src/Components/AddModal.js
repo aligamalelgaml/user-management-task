@@ -23,6 +23,10 @@ export default class AddModal extends React.Component {
         this.props.addUser(newUser);
     }
 
+    /**
+     * Hides modal label as it overlaps with the placeholder.
+     * @param {*} id | Element ID to hide it's label.
+     */
     hideLabel(id) {
         const label = document.getElementById(id);
         if (label) {
@@ -32,6 +36,9 @@ export default class AddModal extends React.Component {
         }
     }
 
+    /**
+     * Resets all fields of a modal. 
+     */
     resetFields = () => {
         const formElements = document.getElementById('modalForm').elements;
 

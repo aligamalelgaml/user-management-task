@@ -7,7 +7,6 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -90,8 +89,8 @@ export default class BasicTable extends React.Component {
     this.setState({date: date}, () => this.props.dateSearch(this.state.date))
   }
 
-  handleRowClick = (params) => {
-    const data = JSON.parse(JSON.stringify(params));
+  handleRowClick = (gridTableData) => {
+    const data = JSON.parse(JSON.stringify(gridTableData)); // Deep copy of 
     this.props.editUser(data.row);
   };
 
