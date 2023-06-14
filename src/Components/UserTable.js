@@ -90,7 +90,7 @@ export default class BasicTable extends React.Component {
   }
 
   handleRowClick = (gridTableData) => {
-    const data = JSON.parse(JSON.stringify(gridTableData)); // Deep copy of 
+    const data = JSON.parse(JSON.stringify(gridTableData)); // Deep copy of data is needed.
     this.props.editUser(data.row);
   };
 
