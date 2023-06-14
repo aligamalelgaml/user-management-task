@@ -72,7 +72,13 @@ const columns = [
 
 export default class BasicTable extends React.Component {
 
-  state = {search : {}};
+  state = {search : ""};
+
+  handleSearch = (e) => {
+    this.setState({search: e.target.value}, () => 
+      this.props.search(this.state.search)
+    )
+  }
 
 
   handleRowClick = (params) => {
@@ -81,6 +87,15 @@ export default class BasicTable extends React.Component {
   };
 
   render() {
+    let rowData;
+
+    if(this.state.search === "") {
+      rowData = this.props.data.length > 0 ? this.props.data : [];
+    } else {
+      console.log(this.props.searchResults);
+      rowData = this.props.searchResults ? this.props.searchResults : [];
+    }
+
     return (
       <Grid
         container
@@ -98,6 +113,8 @@ export default class BasicTable extends React.Component {
                   size="small"
                   placeholder="Search..."
                   id="searchInput"
+                  value={this.state.search}
+                  onChange={this.handleSearch}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -138,7 +155,7 @@ export default class BasicTable extends React.Component {
 
               <Grid item>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker label="Creation Day" defaultValue={dayjs('2023-06-14')}
+                  <DatePicker label="Creation Date" defaultValue={dayjs('2023-06-14')}
                     slotProps={{ textField: { size: 'small' } }}
                   />
                 </LocalizationProvider>
@@ -189,7 +206,7 @@ export default class BasicTable extends React.Component {
           <div style={{ position: "relative", zIndex: 0 }}>
             <DataGrid
               style={{ marginTop: "2px" }}
-              rows={this.props.data.length > 0 ? this.props.data : []}
+              rows={rowData}
               columns={columns}
               checkboxSelection
               localeText={{
