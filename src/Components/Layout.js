@@ -82,6 +82,21 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
+  const formatDate = (timestamp) => {
+    const options = {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    };
+  
+    const date = new Date(timestamp);
+    return date.toLocaleString('en-US', options);
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -99,7 +114,7 @@ export default function PersistentDrawerLeft() {
             </IconButton>
 
             <Typography className='headerFont'>
-              <span style={{ "fontWeight": "bold" }}>Good Morning! </span> {new Date(Date.now()).toLocaleString()}
+              <span style={{ "fontWeight": "bold" }}>Good Morning! </span> {formatDate(Date.now())}
             </Typography>
           </div>
 
