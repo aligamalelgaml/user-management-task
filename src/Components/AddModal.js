@@ -24,15 +24,26 @@ export default class AddModal extends React.Component {
     }
 
     hideLabel(id) {
-        document.getElementById(id).style.display = 'none';
+        const label = document.getElementById(id);
+        if (label) {
+          label.style.display = 'none';
+        } else {
+          console.log(`Element with id '${id}' does not exist.`);
+        }
     }
 
     resetFields = () => {
-        this.formRef.current.reset(); // resets textfields only.
-        console.log(document.getElementById("groupSelect"));
+        const formElements = document.getElementById('modalForm').elements;
+
+        for (let i = 0; i < formElements.length; i++) {
+          const element = formElements[i];
+          if (element.tagName === 'INPUT' && element.type !== 'submit') {
+            element.value = '';
+          }
+        }
+
         document.getElementById("groupSelect").textContent = null;
         document.getElementById("profileSelect").textContent = null;
-        // this.props.reset();
     }
 
 
@@ -52,7 +63,7 @@ export default class AddModal extends React.Component {
 
                         <Grid container spacing={2} sx={{ padding: "10px 25px 25px 25px" }}>
                             <Grid item xs={12}>
-                                <form onSubmit={this.handleSubmit} ref={this.formRef}>
+                                <form onSubmit={this.handleSubmit} id="modalForm" ref={this.formRef}>
 
                                     <FormControl sx={{ mt: "14px" }} fullWidth>
                                         Full Name

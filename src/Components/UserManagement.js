@@ -14,11 +14,6 @@ class UserManagement extends React.Component {
         this.setState({toEditUser: {}, modalState: !this.state.modalState})
     }
 
-    resetModal = () => {
-        console.log("resetting");
-        this.setState({toEditUser: {}});
-    }
-
     addUser = (newUser) => {
         if(this.state.users.some((user) => user["Username"] === newUser["Username"])) {
             console.log("Updating..")
@@ -58,7 +53,7 @@ class UserManagement extends React.Component {
                     </Grid>
                 </Container>
 
-                <AddModal status={this.state.modalState} toggle={this.toggleModal} reset={this.resetModal} addUser={this.addUser} user={this.state.toEditUser}></AddModal>
+                <AddModal status={this.state.modalState} toggle={this.toggleModal} addUser={this.addUser} user={this.state.toEditUser}></AddModal>
 
                 <Container>
                     <UserTable data={this.state.users} editUser={this.editUser}/>

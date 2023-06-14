@@ -1,39 +1,203 @@
-import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { Grid } from '@mui/material';
+import * as React from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import { Box, Button, Grid, TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import { InputAdornment } from "@mui/material";
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import dayjs from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import EditIcon from '@mui/icons-material/Edit';
+import DoDisturbAltIcon from '@mui/icons-material/DoDisturbAlt';
+import LockIcon from '@mui/icons-material/Lock';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DownloadIcon from '@mui/icons-material/Download';
+
 
 
 const columns = [
-  { field: 'id', headerName: 'ID', flex: 0,  align: 'center',  headerAlign: 'center', disableColumnMenu: true },
-  { field: 'Name', headerName: 'Full name', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
-  { field: 'Username', headerName: 'Username', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
-  { field: 'Email Address', headerName: 'Email Address', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
-  { field: 'Group', headerName: 'Group', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
-  { field: 'Profile', headerName: 'Profile', flex: 1,  align: 'center',  headerAlign: 'center', disableColumnMenu: true},
-  { field: 'Created On', headerName: 'Created On', flex: 1,  align: 'center', headerAlign: 'center', disableColumnMenu: true},
+  {
+    field: "Name",
+    headerName: "Full name",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Username",
+    headerName: "Username",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Email Address",
+    headerName: "Email Address",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Group",
+    headerName: "Group",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Profile",
+    headerName: "Status",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Created On",
+    headerName: "Created On",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
 ];
 
 export default class BasicTable extends React.Component {
-  
+
+  state = {search : {}};
+
+
   handleRowClick = (params) => {
-    const data = JSON.parse(JSON.stringify(params))
+    const data = JSON.parse(JSON.stringify(params));
     this.props.editUser(data.row);
   };
 
   render() {
     return (
-      <Grid container bgcolor={'white'} borderRadius={"15px"} mt={"15px"}>
+      <Grid
+        container
+        bgcolor="white"
+        borderRadius="15px"
+        style={{ border: "1px solid black", position: "relative" }}
+        mt="15px"
+      >
         <Grid item xs={12}>
 
-        <DataGrid
-          rows={(this.props.data).length > 0 ? this.props.data : []}
-          columns={columns}
-          checkboxSelection
-          localeText={{
-            noRowsLabel: <></>,
-          }}
-          onRowClick={this.handleRowClick}
-        />
+          <Box sx={{ padding: "20px" }}>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item>
+                <TextField
+                  size="small"
+                  placeholder="Search..."
+                  id="searchInput"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+
+              <Grid item>
+                <TextField
+                  size="small"
+                  placeholder="User Name"
+                  sx={{ width: "140px" }}
+                />
+              </Grid>
+
+              <Grid item>
+                <FormControl sx={{ minWidth: 100 }}>
+                  <InputLabel id="demo-simple-select-helper-label">
+                    User Status
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    defaultValue={"any"}
+                    label="User Status"
+                    size="small"
+                  >
+                    <MenuItem value={"any"}>Any</MenuItem>
+                    <MenuItem value={"active"}>Active</MenuItem>
+                    <MenuItem value={"inactive"}>Inactive</MenuItem>
+                    <MenuItem value={"locked"}>Locked</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker label="Creation Day" defaultValue={dayjs('2023-06-14')}
+                    slotProps={{ textField: { size: 'small' } }}
+                  />
+                </LocalizationProvider>
+              </Grid>
+            </Grid>
+
+            <Grid container mt={"15px"} spacing={2} alignItems="center" justifyContent="space-between">
+              <Grid item display={"flex"} justifyContent={"center"} alignItems={"center"}>
+
+                <Box sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginLeft: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <EditIcon fontSize="14px" />
+                </Box>
+
+                <Box sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginLeft: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <DoDisturbAltIcon fontSize="14px" />
+                </Box>
+
+                <Box sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginLeft: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <LockIcon fontSize="14px" />
+                </Box>
+
+                <Button disableElevation={true} sx={{ marginX: "20px", backgroundColor: "#e7e9ef", color: "black", height: "25px", textTransform: "none" }} variant="contained">Assign to Profile</Button>
+
+                <Button disableElevation={true} sx={{ backgroundColor: "#e7e9ef", color: "black", height: "25px", textTransform: "none" }} variant="contained">Assign to Group</Button>
+
+                <Box sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginX: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <MoreVertIcon fontSize="14px" />
+                </Box>
+
+                <Button variant="text" disableElevation={true} sx={{ color: "black", height: "25px", textTransform: "none", textDecoration: 'underline' }} >Unselect All</Button>
+              </Grid>
+
+              <Grid item>
+                <Box sx={{backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginRight: "10px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <DownloadIcon />
+                </Box>
+              </Grid>
+
+            </Grid>
+
+
+          </Box>
+
+
+
+
+
+          <div style={{ position: "relative", zIndex: 0 }}>
+            <DataGrid
+              style={{ marginTop: "2px" }}
+              rows={this.props.data.length > 0 ? this.props.data : []}
+              columns={columns}
+              checkboxSelection
+              localeText={{
+                noRowsLabel: <></>,
+              }}
+              onRowClick={this.handleRowClick}
+            />
+          </div>
         </Grid>
       </Grid>
     );
