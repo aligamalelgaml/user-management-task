@@ -15,6 +15,7 @@ import DoDisturbAltIcon from '@mui/icons-material/DoDisturbAlt';
 import LockIcon from '@mui/icons-material/Lock';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DownloadIcon from '@mui/icons-material/Download';
+import IconButton from '@mui/material/IconButton';
 
 
 
@@ -71,7 +72,7 @@ const columns = [
 
 export default class BasicTable extends React.Component {
 
-  state = {search : "", userSearch : "", status: "any", date: ""};
+  state = {search : "", userSearch : "", status: "any", date: "", selectedRows: []};
 
   handleSearch = (e) => {
     this.setState({search: e.target.value}, () => this.props.search(this.state.search))
@@ -94,7 +95,15 @@ export default class BasicTable extends React.Component {
     this.props.editUser(data.row);
   };
 
+  onRowsSelectionHandler = (ids, rows) => {
+    const selectedRowsData = ids.map((id) => rows.find((row) => row.id === id));
+    this.setState({selectedRows: selectedRowsData}, () => console.log(this.state.selectedRows));
+  };
 
+  handleDelete = () => {
+    this.props.delete(this.state.selectedRows);
+  }
+  
   render() {
     let rowData;
 
@@ -176,25 +185,25 @@ export default class BasicTable extends React.Component {
             <Grid container mt={"15px"} spacing={2} alignItems="center" justifyContent="space-between">
               <Grid item display={"flex"} justifyContent={"center"} alignItems={"center"}>
 
-                <Box sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginLeft: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <IconButton sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginLeft: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <EditIcon fontSize="14px" />
-                </Box>
+                </IconButton>
 
-                <Box sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginLeft: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <IconButton onClick={this.handleDelete} sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginLeft: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <DoDisturbAltIcon fontSize="14px" />
-                </Box>
+                </IconButton>
 
-                <Box sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginLeft: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <LockIcon fontSize="14px" />
-                </Box>
+                <IconButton sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginLeft: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <LockIcon fontSize="24px" />
+                </IconButton>
 
-                <Button disableElevation={true} sx={{ marginX: "20px", backgroundColor: "#e7e9ef", color: "black", height: "25px", textTransform: "none" }} variant="contained">Assign to Profile</Button>
+                <Button disableElevation={true} sx={{ marginX: "20px", backgroundColor: "#e7e9ef", color: "black", height: "35px", textTransform: "none" }} variant="contained">Assign to Profile</Button>
 
-                <Button disableElevation={true} sx={{ backgroundColor: "#e7e9ef", color: "black", height: "25px", textTransform: "none" }} variant="contained">Assign to Group</Button>
+                <Button disableElevation={true} sx={{ backgroundColor: "#e7e9ef", color: "black", height: "35px", textTransform: "none" }} variant="contained">Assign to Group</Button>
 
-                <Box sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginX: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <IconButton sx={{ backgroundColor: "#e7e9ef", borderRadius: "20%", paddingX: "6px", paddingY: "5px", marginX: "20px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <MoreVertIcon fontSize="14px" />
-                </Box>
+                </IconButton>
 
                 <Button variant="text" disableElevation={true} sx={{ color: "black", height: "25px", textTransform: "none", textDecoration: 'underline' }} >Unselect All</Button>
               </Grid>
@@ -224,6 +233,7 @@ export default class BasicTable extends React.Component {
                 noRowsLabel: <></>,
               }}
               onRowClick={this.handleRowClick}
+              onRowSelectionModelChange={(ids) => this.onRowsSelectionHandler(ids, rowData)}
             />
           </div>
         </Grid>

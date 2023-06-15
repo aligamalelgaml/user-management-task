@@ -130,7 +130,7 @@ class UserManagement extends React.Component {
      * @param {*} date 
      */
     dateSearch = (date) => {
-        let matchingSearch;
+        // let matchingSearch;
     }
 
 
@@ -146,6 +146,14 @@ class UserManagement extends React.Component {
         })
             
         this.setState({ allResults: results });
+    }
+
+    deleteSelected = (selectedRows) => {
+        const matchedResults = this.state.users.filter((user) => {
+            return !(selectedRows.some((row) => row.id === user.id));
+        })
+
+        this.setState({users: matchedResults});
     }
 
     render() {
@@ -168,7 +176,7 @@ class UserManagement extends React.Component {
                 <AddModal status={this.state.modalState} toggle={this.toggleModal} addUser={this.addUser} user={this.state.toEditUser}></AddModal>
 
                 <Container>
-                    <UserTable data={this.state.users} editUser={this.editUser} search={this.search} userSearch={this.userSearch} selectSearch={this.statusSearch} dateSearch={this.dateSearch} searchResults={this.state.allResults} />
+                    <UserTable data={this.state.users} editUser={this.editUser} delete={this.deleteSelected} search={this.search} userSearch={this.userSearch} selectSearch={this.statusSearch} dateSearch={this.dateSearch} searchResults={this.state.allResults} />
                 </Container>
             </>
         )
