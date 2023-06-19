@@ -1,153 +1,208 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { Grid, Button, FormControl, TextField, Select, MenuItem, InputLabel } from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
+import { Grid, TextField, Button, FormControl, Select, MenuItem, InputLabel } from '@mui/material';
 
+const AddModal = ({ status, toggle, addUser, user }) => {
+    let defaultValues;
 
+    const getValues = () => {
 
-export default class AddModal extends React.Component {
-    formRef = React.createRef();
+        if (Object.keys(user).length !== 0) {
+            defaultValues = {name: user["Name"], username: user["Username"], email: user["Email Address"], userGroup: user["Group"], profile: user["Profile"]};
+            console.log(defaultValues)
+        } else {
+            defaultValues = {
+                name: '',
+                username: '',
+                email: '',
+                userGroup: '',
+                profile: ''
+            };
+        }
 
-    handleSubmit = (event) => {
-        event.preventDefault(); // Prevent the default form submission behavior
-
-        // Access the form field values using the event.target object
-        const { name, username, email, userGroup, profile } = event.target.elements;
-
-        const newUser = { "Name": name.value, "Username": username.value, "Email Address": email.value, "Group": userGroup.value, "Profile": profile.value }
-
-        // Closes form
-        this.props.toggle();
-
-        this.props.addUser(newUser);
+        return defaultValues;
     }
 
-    /**
-     * Hides modal label as it overlaps with the placeholder.
-     * @param {*} id | Element ID to hide it's label.
-     */
-    hideLabel(id) {
+    const {
+        control,
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors }
+    } = useForm(getValues());
+
+    const onSubmit = (data) => {
+        const newUserData = { "Name": data.name, "Username": data.username, "Email Address": data.email, "Group": data.userGroup, "Profile": data.profile }
+        addUser(newUserData);
+        toggle(); // Close form
+        handleClear();
+    };
+
+    const hideLabel = (id) => {
         const label = document.getElementById(id);
         if (label) {
-          label.style.display = 'none';
+            label.style.display = 'none';
         } else {
-          console.log(`Element with id '${id}' does not exist.`);
+            console.log(`Element with id '${id}' does not exist.`);
         }
-    }
+    };
 
-    /**
-     * Resets all fields of a modal. 
-     */
-    resetFields = () => {
-        const formElements = document.getElementById('modalForm').elements;
+    const handleClear = () => {
+        reset({
+            name: '',
+            username: '',
+            email: '',
+            userGroup: '',
+            profile: ''
+        });
+    };
 
-        for (let i = 0; i < formElements.length; i++) {
-          const element = formElements[i];
-          if (element.tagName === 'INPUT' && element.type !== 'submit') {
-            element.value = '';
-          }
-        }
+    return (
+        <>
+            <Modal open={status} onClose={toggle} aria-labelledby="addModalTitle">
+                <Box className="modal">
+                    <Typography id="addModalTitle" variant="h6">
+                        Add a new user
+                    </Typography>
 
-        document.getElementById("groupSelect").textContent = null;
-        document.getElementById("profileSelect").textContent = null;
-    }
+                    <Grid container spacing={2} sx={{ padding: '10px 25px 25px 25px' }}>
+                        <Grid item xs={12}>
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <FormControl sx={{ mt: '14px' }} fullWidth>
+                                    Full Name
+                                    <TextField
+                                        defaultValue={defaultValues.name}
+                                        placeholder="Enter full name"
+                                        {...register('name', { required: true })}
+                                        error={!!errors.name}
+                                        helperText={errors.name && 'Name is required'}
+                                    />
+                                </FormControl>
 
+                                <FormControl sx={{ mt: '14px' }} fullWidth>
+                                    Username
+                                    <TextField
+                                        required
+                                        defaultValue={defaultValues.username}
+                                        placeholder="Enter username"
+                                        {...register('username', { required: true })}
+                                        error={!!errors.username}
+                                        helperText={errors.username && 'Username is required'}
+                                    />
+                                </FormControl>
 
-    render() {
-        return (
-            <>
-                <Modal
-                    open={this.props.status}
-                    onClose={this.props.toggle}
-                    aria-labelledby="addModalTitle"
-                >
-                    <Box className="modal">
-                        <Typography id="addModalTitle" variant="h6">
-                            Add a new user
-                        </Typography>
+                                <FormControl sx={{ mt: '14px' }} fullWidth>
+                                    Email Address
+                                    <TextField
+                                        required
+                                        defaultValue={defaultValues.email}
+                                        placeholder="Enter user email address"
+                                        {...register('email', { required: true })}
+                                        error={!!errors.email}
+                                        helperText={errors.email && 'Email is required'}
+                                    />
+                                </FormControl>
 
-
-                        <Grid container spacing={2} sx={{ padding: "10px 25px 25px 25px" }}>
-                            <Grid item xs={12}>
-                                <form onSubmit={this.handleSubmit} id="modalForm" ref={this.formRef}>
-
-                                    <FormControl sx={{ mt: "14px" }} fullWidth>
-                                        Full Name
-                                        <TextField required defaultValue={this.props.user?.["Name"]} placeholder="Enter full name" name="name" />
+                                <FormControl sx={{ mt: '14px' }} fullWidth>
+                                    User Group
+                                    <FormControl fullWidth>
+                                        {!user?.['Group'] && <InputLabel id="group-select-label">Choose user group</InputLabel>}
+                                        <Controller
+                                            control={control}
+                                            name="userGroup"
+                                            defaultValue={defaultValues.userGroup}
+                                            rules={{ required: true }}
+                                            render={({ field }) => (
+                                                <Select
+                                                    required
+                                                    {...field}
+                                                    id="groupSelect"
+                                                    onFocus={() => hideLabel('group-select-label')}
+                                                    error={!!errors.userGroup}
+                                                    displayEmpty
+                                                >
+                                                    <MenuItem value="" disabled>
+                                                        Choose user group
+                                                    </MenuItem>
+                                                    <MenuItem value="Office">Office</MenuItem>
+                                                    <MenuItem value="Managers">Managers</MenuItem>
+                                                    <MenuItem value="Head Office">Head Office</MenuItem>
+                                                </Select>
+                                            )}
+                                        />
+                                        {errors.userGroup && (
+                                            <Typography variant="caption" color="error">
+                                                User group is required
+                                            </Typography>
+                                        )}
                                     </FormControl>
+                                </FormControl>
 
-                                    <FormControl sx={{ mt: "14px" }} fullWidth >
-                                        Username
-                                        <TextField required defaultValue={this.props.user?.["Username"]} placeholder={"Enter username"} name='username' />
+                                <FormControl sx={{ mt: '10px' }} fullWidth>
+                                    User Profile
+                                    <FormControl fullWidth>
+                                        {!user?.['Profile'] && <InputLabel id="profile-select-label">Choose profile</InputLabel>}
+                                        <Controller
+                                            control={control}
+                                            name="profile"
+                                            defaultValue={defaultValues.profile}
+                                            rules={{ required: true }}
+                                            render={({ field }) => (
+                                                <Select
+                                                    required
+                                                    {...field}
+                                                    id="profileSelect"
+                                                    onFocus={() => hideLabel('profile-select-label')}
+                                                    error={!!errors.profile}
+                                                    displayEmpty
+                                                >
+                                                    <MenuItem value="" disabled>
+                                                        Choose profile
+                                                    </MenuItem>
+                                                    <MenuItem value="Active">Active</MenuItem>
+                                                    <MenuItem value="Inactive">Inactive</MenuItem>
+                                                    <MenuItem value="Locked">Locked</MenuItem>
+                                                </Select>
+                                            )}
+                                        />
+                                        {errors.profile && (
+                                            <Typography variant="caption" color="error">
+                                                Profile is required
+                                            </Typography>
+                                        )}
                                     </FormControl>
+                                </FormControl>
 
-                                    <FormControl sx={{ mt: "14px" }} fullWidth >
-                                        Email Address
-                                        <TextField required defaultValue={this.props.user?.["Email Address"]} placeholder={"Enter user email address"} name='email' />
-                                    </FormControl>
+                                <hr style={{ margin: '30px 0' }} />
 
-                                    <FormControl sx={{ mt: "14px" }} fullWidth>
-                                        User Group
-                                        <FormControl fullWidth>
-                                        {!this.props.user?.["Group"] && <InputLabel id="group-select-label">Choose user group</InputLabel>}
-                                            <Select required id="groupSelect" defaultValue={this.props.user?.["Group"] !== undefined ? this.props.user?.["Group"] : ""} name="userGroup" onFocus={() => this.hideLabel("group-select-label")}>
-                                                <MenuItem value="Office">Office</MenuItem>
-                                                <MenuItem value="Managers">Managers</MenuItem>
-                                                <MenuItem value="Head Office">Head Office</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </FormControl>
-
-                                    <FormControl sx={{ mt: "10px" }} fullWidth>
-                                        User Profile
-                                        <FormControl fullWidth>
-                                            {!this.props.user?.["Profile"] && <InputLabel id="profile-select-label">Choose profile</InputLabel>}
-                                            <Select required
-                                                id="profileSelect"
-                                                defaultValue={this.props.user?.["Profile"] !== undefined ? this.props.user?.["Profile"] : ""}
-                                                name="profile"
-                                                onFocus={() => this.hideLabel("profile-select-label")}
-                                            >
-                                                <MenuItem value="Active">Active</MenuItem>
-                                                <MenuItem value="Inactive">Inactive</MenuItem>
-                                                <MenuItem value="Locked">Locked</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </FormControl>
-
-
-                                    <hr style={{ margin: '30px 0' }} />
-
-                                    <Grid container sx={{ mt: "25px" }}>
-
-                                        <Grid item xs={12}>
-                                            <Grid container justifyContent="space-between">
-                                                <Grid item xs={4}>
-                                                    <Button onClick={this.resetFields} variant="text" color="primary">
-                                                        Reset Fields
-                                                    </Button>
-                                                </Grid>
-                                                <Grid item xs={8} container justifyContent="flex-end">
-                                                    <Button onClick={this.props.toggle} variant="outlined" color="primary">
-                                                        Cancel
-                                                    </Button>
-                                                    <Button type='submit' sx={{ ml: "20px" }} variant="contained" color="success">
-                                                        Add User
-                                                    </Button>
-                                                </Grid>
+                                <Grid container sx={{ mt: '25px' }}>
+                                    <Grid item xs={12}>
+                                        <Grid container justifyContent="space-between">
+                                            <Grid item xs={4}>
+                                                <Button type="button" onClick={handleClear} variant="text" color="primary">
+                                                    Reset Fields
+                                                </Button>
+                                            </Grid>
+                                            <Grid item xs={8} container justifyContent="flex-end">
+                                                <Button onClick={toggle} variant="outlined" color="primary">
+                                                    Cancel
+                                                </Button>
+                                                <Button type="submit" sx={{ ml: '20px' }} variant="contained" color="success">
+                                                    Add User
+                                                </Button>
                                             </Grid>
                                         </Grid>
                                     </Grid>
-
-                                </form>
-                            </Grid>
+                                </Grid>
+                            </form>
                         </Grid>
+                    </Grid>
+                </Box>
+            </Modal>
+        </>
+    );
+};
 
-
-                    </Box>
-                </Modal>
-            </>
-        );
-    }
-}
+export default AddModal;

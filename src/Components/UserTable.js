@@ -106,13 +106,15 @@ export default class BasicTable extends React.Component {
   
   render() {
     let rowData;
-
+    
     if(this.state.search === "" && this.state.userSearch === "" && this.state.status === "any") {
       rowData = this.props.data.length > 0 ? this.props.data : [];
     } else {
       rowData = this.props.searchResults ? this.props.searchResults : [];
     }
-
+    
+    console.log(rowData);
+    
     return (
       <Grid
         container

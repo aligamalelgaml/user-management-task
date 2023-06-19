@@ -39,7 +39,7 @@ class UserManagement extends React.Component {
             this.setState({ users: updatedUsers });
         } else {
             const date = new Date().toLocaleDateString();
-            const addedUser = { ...newUser, id: Number(this.state.users.length + 1), "Created On": date } // Adding UID & current date to new user object.
+            const addedUser = { ...newUser, id: Number(this.state.users.length + 1), "Created On": date }; // Adding UID & current date to new user object.
 
             this.setState({ users: this.state.users.concat(addedUser) }, () => {
                 console.log("Added: ", addedUser);
